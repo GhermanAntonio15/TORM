@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: codeassist-postgres
+    environment:
+      POSTGRES_DB: codeassist
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./CodeAssist
+    container_name: codeassist-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/codeassist
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres

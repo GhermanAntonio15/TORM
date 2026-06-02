@@ -1,0 +1,29 @@
+# Java
+**/target/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+**/node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build frontend
+Frontend/build/
+Frontend/dist/
+
+# AWS
+*.pem
+
+# Environment
+.env

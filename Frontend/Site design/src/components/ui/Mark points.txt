@@ -1,0 +1,13 @@
+Mark 5	The project integrates Spring AI with at least one AI service and follows a layered architecture based on the
+		Repository–Service–Controller pattern using JPA.	
+
+Mark 6	The project includes validation for at least 10 inputs and implements a minimum of 10 unit tests.
+
+Mark 7	The project provides a responsive user interface that adapts to different devices and screen sizes.
+
+Mark 8	The project demonstrates context-based or parameterized AI interactions, allowing more dynamic and intelligent responses.	
+		Example: The AI remembers previous user messages or customizes its response based on selected tone, topic, or role.
+		
+Mark 9	The project stores AI responses in a database (ChromaDB), enabling history tracking, analytics, or context reuse.
+
+Mark 10	The project enables Spring Security for authentication and authorization, and integrates Spring Cloud for scalability and service orchestration.
