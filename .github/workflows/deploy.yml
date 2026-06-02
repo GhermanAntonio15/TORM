@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: CI Pipeline
 
 on:
   push:
@@ -6,50 +6,44 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: CodeAssist
-
     steps:
 
-      - name: Checkout source
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 21
+      # Backend Spring Boot
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 17
 
-      - name: Build Spring Boot application
+      - name: Build Backend
+        working-directory: CodeAssist
         run: mvn clean package -DskipTests
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # Frontend React
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          node-version: 20
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Install Frontend Dependencies
+        working-directory: Frontend
+        run: npm install
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.ECR_REPOSITORY }} .
+      - name: Build Frontend
+        working-directory: Frontend
+        run: npm run build
 
-      - name: Tag Docker image
-        run: |
-          docker tag ${{ secrets.ECR_REPOSITORY }}:latest \
-          935847498377.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+      # Docker
 
-      - name: Push Docker image
-        run: |
-          docker push \
-          935847498377.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+      - name: Build Docker Image
+        working-directory: CodeAssist
+        run: docker build -t codeassist-backend .
